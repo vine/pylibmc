@@ -1858,15 +1858,22 @@ static PyObject *_exc_by_rc(memcached_return rc) {
     return (PyObject *)PylibMCExc_MemcachedError;
 }
 
-static char *_get_lead(memcached_st *mc, char *buf, int n, const char *what,
-        memcached_return error, const char *key, Py_ssize_t len) {
-    int sz = snprintf(buf, n, "error %d from %.32s", error, what);
+static char *_get_lead_verbose(memcached_st *mc, char *buf, int n, const char *what,
+        const char *host, memcached_return error, const char *key, Py_ssize_t len) {
+    int sz = snprintf(buf, n, "host[%s]: error %d from %.32s", host, error, what);
 
     if (key != NULL && len) {
         sz += snprintf(buf+sz, n-sz, "(%.32s)", key);
     }
 
     return buf;
+}
+
+static char *_get_lead(memcached_st *mc, char *buf, int n, const char *what,
+        memcached_return error, const char *key, Py_ssize_t len) {
+
+    char *host = "";
+    return _get_lead_verbose(mc, buf, n, what, host, error, key, len);
 }
 
 static void _set_error(memcached_st *mc, memcached_return error, char *lead) {
@@ -1889,7 +1896,14 @@ static PyObject *PylibMC_ErrFromMemcachedWithKey(PylibMC_Client *self,
         const char *what, memcached_return error, const char *key, Py_ssize_t len) {
     char lead[128];
 
-    _get_lead(self->mc, lead, sizeof(lead), what, error, key, len);
+    memcached_return error2;
+
+    memcached_server_instance_st instance = memcached_server_by_key(self->mc, key, len, &error2);
+
+    char host[64];
+    snprintf(host, 64, "%s:%d", memcached_server_name(instance), memcached_server_port(instance));
+
+    _get_lead_verbose(self->mc, lead, sizeof(lead), what, host, error, key, len);
     _set_error(self->mc, error, lead);
 
     return NULL;
