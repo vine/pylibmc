@@ -72,7 +72,7 @@ typedef ssize_t Py_ssize_t;
 #define PYLIBMC_FLAG_ZLIB    (1 << 3)
 /* }}} */
 
-#if LIBMEMCACHED_VERSION_HEX >= 0x01000009
+#if LIBMEMCACHED_VERSION_HEX >= 0x01000017
 typedef const struct memcached_instance_st *memcached_server_instance_st;
 #endif
 
