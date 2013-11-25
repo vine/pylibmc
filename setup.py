@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os
 import sys
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 # Need an 'open' function that supports the 'encoding' argument:
 if sys.version_info[0] < 3:
