@@ -12,7 +12,7 @@ from setuptools import setup, Extension
 cmd = None
 use_zlib = True
 pkgdirs = []  # incdirs and libdirs get these
-libs = ["memcached"]
+libs = []
 defs = []
 incdirs = []
 libdirs = []
