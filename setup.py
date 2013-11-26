@@ -17,7 +17,7 @@ if sys.version_info[0] < 3:
 cmd = None
 use_zlib = True
 pkgdirs = []  # incdirs and libdirs get these
-libs = ["memcached"]
+libs = []
 defs = []
 incdirs = []
 libdirs = []
