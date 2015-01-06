@@ -1898,7 +1898,7 @@ static PyObject *PylibMC_ErrFromMemcachedWithKey(PylibMC_Client *self,
 
     memcached_return error2;
 
-    memcached_server_instance_st instance = memcached_server_by_key(self->mc, key, len, &error2);
+    const memcached_instance_st *instance = memcached_server_by_key(self->mc, key, len, &error2);
 
     char host[64];
     snprintf(host, 64, "%s:%d", memcached_server_name(instance), memcached_server_port(instance));
